@@ -864,14 +864,6 @@ function sailSetMode(mode){
   }else if(mode==='quiz'&&sailQuizOrder.length===0){
     sailStartQuiz();
   }
-  if(mode==='blog'){
-    document.querySelectorAll('.sail-blog-card').forEach(function(card){
-      card.onclick=function(){
-        var full=card.querySelector('.sail-blog-full');
-        if(full) full.classList.toggle('open');
-      };
-    });
-  }
 }
 
 /* Init */
