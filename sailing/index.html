@@ -156,7 +156,12 @@ padding:16px;animation:pageIn .3s ease;
 .sail-answer.correct{border-color:var(--green);background:var(--green-light);color:#166534}
 .sail-answer.wrong{border-color:var(--red);background:var(--red-light);color:#991b1b}
 .sail-answer[disabled]{cursor:default;pointer-events:none}
-.sail-quiz-actions{display:flex;gap:12px;margin-top:18px;justify-content:center}
+.sail-answer.disq{border-color:var(--red);background:var(--red-light);color:#991b1b;box-shadow:0 0 0 3px rgba(239,68,68,.25)}
+.sail-disq-warn{margin-top:12px;padding:12px 16px;background:var(--red-light);border:2px solid var(--red);border-radius:12px;color:#991b1b;font-weight:700;font-size:.9rem;line-height:1.5}
+.sail-disq-note{margin-top:12px;padding:10px 14px;background:var(--bg-main);border:1px dashed var(--border);border-radius:12px;color:var(--text-secondary);font-size:.82rem;line-height:1.5}
+.sail-pool-note{text-align:center;font-size:.75rem;color:var(--text-muted);margin:-6px 0 14px;line-height:1.5}
+.sail-quiz-actions{display:flex;gap:12px;margin-top:18px;justify-content:center;flex-wrap:wrap}
+.sail-quiz-actions .sail-disq-warn,.sail-quiz-actions .sail-disq-note{width:100%;margin-top:0;text-align:right}
 .sail-quiz-btn{padding:12px 28px;border:none;border-radius:12px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .25s}
 .sail-quiz-btn.primary{background:var(--primary-gradient);color:#fff}
 .sail-quiz-btn.primary:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(124,58,237,.4)}
@@ -241,6 +246,7 @@ border-top:1px solid var(--border);margin-top:24px;
   <!-- Quiz Mode -->
   <div class="sail-mode-panel" data-sail-panel="quiz">
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;justify-content:center" id="sailExamFilter"></div>
+    <p class="sail-pool-note" id="sailPoolNote"></p>
     <div class="sail-quiz-box" id="sailQuizBox">
       <div class="sail-loader"><div class="spinner"></div><p style="margin-top:16px;color:var(--text-secondary)">טוען שאלות מהמאגר הרשמי של רשות הספנות...</p></div>
     </div>
@@ -603,7 +609,7 @@ border-top:1px solid var(--border);margin-top:24px;
         <p>הדרך הטובה ביותר להתכונן היא שילוב של קריאת חומר תאורטי מסודר עם תרגול שאלות אמת חוזר ונשנה — כך המוח לומד לזהות דפוסי שאלות ולא רק לשנן עובדות בודדות. חשוב לענות על שאלות במגוון נושאים, ולא להתמקד רק בנושא אחד, כי מבחן התאוריה בפועל משלב שאלות מכל התחומים.</p>
 
         <h3>תרגול חינם באתר</h3>
-        <p>במערכת התאוריה הימית שלנו תוכלו לתרגל 50 שאלות בעברית בכל סבב, מתוך למעלה מ-1,100 שאלות מהמאגר הרשמי, מכוסות בארבע תשובות אפשריות לכל שאלה, עם משוב מיידי על כל תשובה ותוצאה מסכמת בסוף כל סבב. השאלות מתערבבות בכל ריצה כדי לחזק את ההבנה ולא רק את השינון, ואת כל הרקע התיאורטי תוכלו למצוא בחוברת הלימוד המלווה, המחולקת לפי נושאים לצורך למידה נוחה.</p>
+        <p>במערכת התאוריה הימית שלנו תוכלו לתרגל 50 שאלות בעברית בכל סבב, מתוך למעלה מ-1,100 שאלות מהמאגר הרשמי, מכוסות בארבע תשובות אפשריות לכל שאלה, עם משוב מיידי על כל תשובה ותוצאה מסכמת בסוף כל סבב. שאלות עם תשובה פוסלת (חוקי דרך, מצוקה) מסומנות במיוחד — במבחן האמיתי בחירה בתשובה פוסלת מכשילה את המבחן כולו, גם אם שאר התשובות נכונות. השאלות מתערבבות בכל ריצה כדי לחזק את ההבנה ולא רק את השינון, ואת כל הרקע התיאורטי תוכלו למצוא בחוברת הלימוד המלווה, המחולקת לפי נושאים לצורך למידה נוחה.</p>
       </div>
     </div>
     <div class="sail-blog-card">
@@ -661,6 +667,7 @@ var sailQuizWrong=[];
 var sailQuestionsLoaded=false;
 var sailQuizTotal=50;
 var sailExamFilter='all';
+var sailExcludedCount=0;
 
 function toggleStudy(el){
   el.classList.toggle('open');
@@ -716,13 +723,15 @@ async function sailLoadQuestions(){
       var ans=(r.Answer||'').trim();
       var cat=(r.Category||'').trim();
       var exam=(r.Exam_Types||'').trim();
+      var dq=(r.Disqualification_Answer||'').trim()==='+';
       if(qText){
         if(curQ&&curQ.a.length>=3&&curQ.c>=0)questions.push(curQ);
-        curQ={q:qText,a:[],c:-1,cat:cat,exam:exam};
-        if(desc){curQ.a.push(desc);if(ans==='+')curQ.c=curQ.a.length-1;}
+        curQ={q:qText,a:[],c:-1,cat:cat,exam:exam,dq:[]};
+        if(desc){curQ.a.push(desc);if(ans==='+')curQ.c=curQ.a.length-1;if(dq)curQ.dq.push(curQ.a.length-1);}
       }else if(desc&&curQ){
         curQ.a.push(desc);
         if(ans==='+')curQ.c=curQ.a.length-1;
+        if(dq)curQ.dq.push(curQ.a.length-1);
       }
     }
     if(curQ&&curQ.a.length>=3&&curQ.c>=0)questions.push(curQ);
@@ -730,6 +739,7 @@ async function sailLoadQuestions(){
       var all=q.q+' '+q.a.join(' ');
       return !/תמונה|ציור|תרשים|picture/i.test(all)&&q.q.length>=15;
     });
+    sailExcludedCount=questions.length-SAIL_QUESTIONS.length;
     sailQuestionsLoaded=true;
     sailBuildExamFilter();
   }catch(e){
@@ -747,15 +757,18 @@ function sailBuildExamFilter(){
     exams[e]=(exams[e]||0)+1;
   }
   var html='<button class="sail-quiz-btn '+(sailExamFilter==='all'?'primary':'secondary')+'" data-exam="all" style="font-size:.8rem;padding:8px 14px">הכל ('+SAIL_QUESTIONS.length+')</button>';
-  var mainExams=['עיוני ימאות א','עוצמה ב','עיוני ימאות ב','עיוני ניווט ב (מכשירים)','עיוני מכונאות'];
+  var mainExams=['עיוני ימאות א','עוצמה ב','עיוני ימאות ב','עיוני ימאות ג','עיוני ניווט ב (מכשירים)','עיוני מכונאות'];
   for(var mi=0;mi<mainExams.length;mi++){
     var me=mainExams[mi];
     if(exams[me]){
       var shortName=me.replace('עיוני ','').replace(' (מכשירים)','');
-      html+='<button class="sail-quiz-btn '+(sailExamFilter===me?'primary':'secondary')+'" data-exam="'+me+'" style="font-size:.8rem;padding:8px 14px">'+shortName+' ('+exams[me]+')</button>';
+      var cnt=0;for(var qi=0;qi<SAIL_QUESTIONS.length;qi++){if(SAIL_QUESTIONS[qi].exam&&SAIL_QUESTIONS[qi].exam.indexOf(me)>=0)cnt++;}
+      html+='<button class="sail-quiz-btn '+(sailExamFilter===me?'primary':'secondary')+'" data-exam="'+me+'" style="font-size:.8rem;padding:8px 14px">'+shortName+' ('+cnt+')</button>';
     }
   }
   filterEl.innerHTML=html;
+  var noteEl=document.getElementById('sailPoolNote');
+  if(noteEl)noteEl.innerHTML=sailExcludedCount>0?'המאגר הרשמי כולל עוד '+sailExcludedCount+' שאלות עם תמונה/תרשים שאינן מוצגות כאן (המבחן בפועל כולל גם אותן) · שאלות מסומנות "פוסלת" — טעות בהן מכשילה את המבחן כולו':'';
   filterEl.querySelectorAll('.sail-quiz-btn').forEach(function(btn){
     btn.addEventListener('click',function(){
       sailExamFilter=btn.getAttribute('data-exam');
@@ -801,6 +814,7 @@ function sailRenderQuestion(){
   var pct=Math.round((sailQuizIdx/total)*100);
   var optOrder=sailShuffle(q.a.map(function(_,i){return i}));
   var catBadge=q.cat?'<span class="sail-stat" style="margin-bottom:12px;display:inline-block">'+q.cat+'</span>':'';
+  if(q.dq&&q.dq.length)catBadge+='<span class="sail-stat" style="margin-bottom:12px;display:inline-block;background:var(--red-light);border-color:var(--red);color:#991b1b">⚠️ שאלה עם תשובה פוסלת</span>';
   var answersHtml='';
   for(var oi=0;oi<optOrder.length;oi++){
     answersHtml+='<button class="sail-answer" data-oi="'+optOrder[oi]+'">'+q.a[optOrder[oi]]+'</button>';
@@ -826,10 +840,15 @@ function sailSelectAnswer(btn,qIndex){
     var oi=parseInt(b.getAttribute('data-oi'),10);
     if(oi===q.c)b.classList.add('correct');
     else if(b===btn)b.classList.add('wrong');
+    if(q.dq&&q.dq.indexOf(oi)>=0){b.classList.add('disq');b.innerHTML='⛔ '+b.innerHTML+' <small style="font-weight:600">(תשובה פוסלת)</small>';}
   });
+  var isDisq=q.dq&&q.dq.indexOf(chosenOi)>=0;
+  var disqHtml='';
+  if(isDisq)disqHtml='<div class="sail-disq-warn">⛔ תשובה זו פוסלת את המבחן! במבחן האמיתי של רשות הספנות, בחירה בתשובה פוסלת מכשילה את כל המבחן — גם אם שאר התשובות נכונות.</div>';
+  else if(q.dq&&q.dq.length)disqHtml='<div class="sail-disq-note">💡 שימו לב: בשאלה זו יש תשובה פוסלת (מסומנת ⛔). במבחן האמיתי, בחירה בה מכשילה את המבחן כולו.</div>';
   var actions=document.getElementById('sailQuizActions');
   var isLast=sailQuizIdx>=sailQuizOrder.length-1;
-  actions.innerHTML='<button class="sail-quiz-btn primary" id="sailNextBtn">'+(isLast?'סיום ותוצאה':'השאלה הבאה ←')+'</button>';
+  actions.innerHTML=disqHtml+'<button class="sail-quiz-btn primary" id="sailNextBtn">'+(isLast?'סיום ותוצאה':'השאלה הבאה ←')+'</button>';
   document.getElementById('sailNextBtn').addEventListener('click',function(){
     sailQuizIdx++;
     sailRenderQuestion();
