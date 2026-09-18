@@ -35,6 +35,14 @@
    Slots are spaced for a 72px worst-case control width, so this
    still holds if the shared accessibility widget changes size.
    ============================================================ */
+/* A fixed-position layer only holds if the initial containing block
+   still matches the viewport. Any horizontal overflow on an RTL page
+   grows the scroll area to the left, offsets html, and drags every
+   fixed control off-screen with it - that is exactly how flights lost
+   its accessibility button at 375px (FAB at x=-79, unreachable on
+   every phone). No !important: a page that genuinely needs to scroll
+   sideways can still override this. */
+html{overflow-x:hidden}
 html body{--lior-float-b:50px}
 @media (max-width:640px){html body{--lior-float-b:72px}}
 /* the legal bar must not paint over the controls or over the
