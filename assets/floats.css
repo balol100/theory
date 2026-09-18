@@ -66,18 +66,23 @@ html body #xa-launcher .xa-label{display:none!important}
 html body #xa-proactive{top:auto!important;right:auto!important;left:16px!important;bottom:calc(var(--lior-float-b) + 150px)!important}
 html body #lior-share,
 html body #shareFab,
-html body #share-fab,
-html body #aria-fab{position:fixed!important;inset-inline-start:auto!important;inset-inline-end:auto!important;top:auto!important;right:auto!important;bottom:var(--lior-float-b)!important;left:172px!important;z-index:92!important}
+html body #share-fab{position:fixed!important;inset-inline-start:auto!important;inset-inline-end:auto!important;top:auto!important;right:auto!important;bottom:var(--lior-float-b)!important;left:172px!important;z-index:92!important}
 html body .wa-float,
 html body .wa-fab,
 html body #wa-fab,
 html body #waFloat,
 html body #whatsapp-float{position:fixed!important;inset-inline-start:auto!important;inset-inline-end:auto!important;top:auto!important;left:auto!important;bottom:var(--lior-float-b)!important;right:24px!important;z-index:90!important}
 /* Disclaimer badge rides above the row, clear of every control */
+/* Aria also ships a second, mobile-only launcher (#aria-fab) that is
+   separate from #xa-launcher. It gets a fourth slot of its own - on
+   stocks it shared slot three with the share FAB and the two sat on
+   top of each other. */
+html body #aria-fab{position:fixed!important;inset-inline-start:auto!important;inset-inline-end:auto!important;top:auto!important;right:auto!important;bottom:var(--lior-float-b)!important;left:248px!important;z-index:91!important}
 html body #lior-disclaimer-badge{left:auto!important;right:12px!important;bottom:calc(var(--lior-float-b) + 78px)!important}
 @media (max-width:400px){
   html body #a11yFab,html body #a11yFab.a11y-fab,html body .a11y-fab{left:12px!important}
   html body #xa-launcher{left:84px!important}
-  html body #lior-share,html body #shareFab,html body #share-fab,html body #aria-fab{left:152px!important}
+  html body #lior-share,html body #shareFab,html body #share-fab{left:152px!important}
+  html body #aria-fab{left:220px!important}
   html body .wa-float,html body .wa-fab,html body #wa-fab,html body #waFloat,html body #whatsapp-float{right:12px!important}
 }
