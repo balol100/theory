@@ -1,0 +1,71 @@
+/* ============================================================
+   lior-ai estate - floating controls layer.
+   SINGLE SOURCE OF TRUTH for every fixed control in the corners:
+   accessibility FAB, Aria chat launcher, share FAB, WhatsApp,
+   the disclaimer badge and the fixed legal bar.
+
+   This file is byte-identical across convert, stocks, flights and
+   every other repo that carries it. It is copied into each repo
+   rather than linked cross-origin on purpose: a stylesheet fetched
+   from another site would put every page load at the mercy of that
+   origin, and a fixed-position layout is exactly the thing you do
+   not want to lose to a failed request. When the convention
+   changes, change it in every repo that carries this file.
+
+   Link it from the HTML head, never inject it from JavaScript.
+   HTML is served must-revalidate; a script that injects the link
+   is cached for two hours, so a JS-injected layer silently does
+   nothing for returning visitors after a change.
+
+   Accessibility, Aria and share each own a slot along the
+   bottom-start edge; WhatsApp is pinned to the bottom-end corner.
+   All of them clear the fixed legal bar, which owns the very
+   bottom strip of the viewport.
+
+   Positions are physical (left/right), never logical, so RTL and
+   LTR language pages lay out identically.
+
+   Declared with high specificity on purpose: it must beat the
+   per-page inline patches, the Netlify snippet styles and the
+   styles injected at runtime by the shared accessibility widget
+   and the Aria widget. Never depend on either widget's internals
+   - they are shared with client sites and can change without
+   warning.
+
+   Slots are spaced for a 72px worst-case control width, so this
+   still holds if the shared accessibility widget changes size.
+   ============================================================ */
+html body{--lior-float-b:50px}
+@media (max-width:640px){html body{--lior-float-b:72px}}
+/* the legal bar must not paint over the controls or over the
+   accessibility / Aria dialogs, which sit below 100000 */
+html body #lior-legal-footer{z-index:89!important}
+html body #a11yFab,
+html body .a11y-fab{position:fixed!important;top:auto!important;right:auto!important;bottom:var(--lior-float-b)!important;left:16px!important;z-index:100000!important}
+/* The panel must never be wider than the viewport. When it was, the
+   RTL scroll area grew to the left and dragged the fixed FAB clean
+   off the screen at 375px - the accessibility control was present
+   in the DOM and unreachable on every phone. */
+html body #a11yPanel,
+html body .a11y-panel{max-width:calc(100vw - 24px)!important}
+html body #xa-launcher{position:fixed!important;top:auto!important;right:auto!important;bottom:var(--lior-float-b)!important;left:96px!important;z-index:99998!important}
+/* the launcher's text pill overlaps the share button on desktop widths */
+html body #xa-launcher .xa-label{display:none!important}
+html body #xa-proactive{top:auto!important;right:auto!important;left:16px!important;bottom:calc(var(--lior-float-b) + 150px)!important}
+html body #lior-share,
+html body #shareFab,
+html body #share-fab,
+html body #aria-fab{position:fixed!important;inset-inline-start:auto!important;inset-inline-end:auto!important;top:auto!important;right:auto!important;bottom:var(--lior-float-b)!important;left:172px!important;z-index:92!important}
+html body .wa-float,
+html body .wa-fab,
+html body #wa-fab,
+html body #waFloat,
+html body #whatsapp-float{position:fixed!important;inset-inline-start:auto!important;inset-inline-end:auto!important;top:auto!important;left:auto!important;bottom:var(--lior-float-b)!important;right:24px!important;z-index:90!important}
+/* Disclaimer badge rides above the row, clear of every control */
+html body #lior-disclaimer-badge{left:auto!important;right:12px!important;bottom:calc(var(--lior-float-b) + 78px)!important}
+@media (max-width:400px){
+  html body #a11yFab,html body .a11y-fab{left:12px!important}
+  html body #xa-launcher{left:84px!important}
+  html body #lior-share,html body #shareFab,html body #share-fab,html body #aria-fab{left:152px!important}
+  html body .wa-float,html body .wa-fab,html body #wa-fab,html body #waFloat,html body #whatsapp-float{right:12px!important}
+}
