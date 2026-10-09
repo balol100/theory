@@ -53,11 +53,11 @@
 --red-light:#fef2f2;
 --amber:#f59e0b;
 --amber-light:#fef3c7;
---blue:#3b82f6;
+--blue:#2563eb;
 --pink:#ec4899;
 --text-primary:#1e293b;
 --text-secondary:#64748b;
---text-muted:#94a3b8;
+--text-muted:#64748b;
 --border:#e2e8f0;
 --shadow:0 4px 24px rgba(0,0,0,0.08);
 --shadow-sm:0 1px 3px rgba(0,0,0,0.06);
@@ -219,15 +219,23 @@ border-top:1px solid var(--border);margin-top:24px;
   .sail-mode-btn{font-size:.82rem;padding:10px 6px}
 }
 </style>
+<style id="a11y-wave2">/* נגישות (ת״י 5568 / WCAG 2.0 AA): דילוג לתוכן + פוקוס נראה */
+.skip-link{position:absolute;top:-200px;right:8px;z-index:2147483647;background:#111;color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;text-decoration:none}
+.skip-link:focus{top:8px;outline:3px solid #ffbf47;outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #ffbf47;outline-offset:2px;box-shadow:0 0 0 6px #111}
+.study-source a,footer a,p a{text-decoration:underline;text-underline-offset:2px}
+#sail-content:focus{outline:none}
+</style>
 </head>
 <body>
+<a class="skip-link" href="#sail-content">דילוג לתוכן הראשי</a>
 
 <header class="sail-header">
   <span class="sail-header-title">⛵ תאוריה ימית</span>
   <a href="/" class="sail-header-back">← תאוריה לנהיגה</a>
 </header>
 
-<main class="sail-content" id="sail-content">
+<main class="sail-content" id="sail-content" tabindex="-1">
   <div style="width:100%;max-width:900px;margin:0 auto 24px;padding:0 16px;">
     <img src="/sailing-og.png" alt="תאוריה ימית — שאלות לרישיון שייט" style="width:100%;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
   </div>
@@ -649,7 +657,7 @@ border-top:1px solid var(--border);margin-top:24px;
   </div>
 
   <footer class="app-footer">
-    Powered by <a href="https://lior-ai.com" target="_blank" rel="noopener">lior-ai.com</a><br>
+    Powered by <a href="https://lior-ai.com" target="_blank" rel="noopener">lior-ai.com</a> · <a href="https://lior-ai.com/accessibility-statement/">הצהרת נגישות</a><br>
     נתונים: רשות הספנות והנמלים (<a href="https://data.gov.il/dataset/opercraft_tq" target="_blank" rel="noopener">data.gov.il</a>) | רישיון ממשלתי פתוח
   </footer>
 </main>
