@@ -110,11 +110,11 @@
 --red-light:#fef2f2;
 --amber:#f59e0b;
 --amber-light:#fef3c7;
---blue:#3b82f6;
+--blue:#2563eb;
 --pink:#ec4899;
 --text-primary:#1e293b;
 --text-secondary:#64748b;
---text-muted:#94a3b8;
+--text-muted:#64748b;
 --border:#e2e8f0;
 --shadow:0 4px 24px rgba(0,0,0,0.08);
 --shadow-sm:0 1px 3px rgba(0,0,0,0.06);
@@ -666,8 +666,16 @@ html,body{height:100%}
 }
 
 </style>
-<link rel="stylesheet" href="/assets/floats.css"></head>
+<link rel="stylesheet" href="/assets/floats.css"><style id="a11y-wave2">/* נגישות (ת״י 5568 / WCAG 2.0 AA): דילוג לתוכן + פוקוס נראה */
+.skip-link{position:absolute;top:-200px;right:8px;z-index:2147483647;background:#111;color:#fff;padding:12px 18px;border-radius:8px;font-weight:700;text-decoration:none}
+.skip-link:focus{top:8px;outline:3px solid #ffbf47;outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #ffbf47;outline-offset:2px;box-shadow:0 0 0 6px #111}
+.study-source a,footer a,p a{text-decoration:underline;text-underline-offset:2px}
+#app-content:focus{outline:none}
+</style>
+</head>
 <body>
+<a class="skip-link" href="#app-content">דילוג לתוכן הראשי</a>
 
 <div id="loading-screen">
 <div class="loading-car">🚗</div>
@@ -685,7 +693,7 @@ html,body{height:100%}
 <button class="lang-toggle" id="lang-toggle" onclick="toggleLanguage()">EN</button>
 </div>
 </header>
-<main id="app-content"></main>
+<main id="app-content" tabindex="-1"></main>
 <nav id="app-nav">
 <button class="nav-btn active" data-page="home" onclick="navigate('home')">
 <span class="nav-icon">🏠</span>
@@ -902,7 +910,7 @@ var BADGES = [
   { id:'hundred', icon:'💯', key:'badge_100' },
   { id:'master', icon:'👑', key:'badge_master' }
 ];
-var CONFETTI_COLORS = ['#7c3aed','#a855f7','#22c55e','#f59e0b','#3b82f6','#ec4899'];
+var CONFETTI_COLORS = ['#7c3aed','#a855f7','#22c55e','#f59e0b','#2563eb','#ec4899'];
 var DAILY_TARGET = 15;
 
 var lang = 'he';
@@ -1671,7 +1679,7 @@ function renderProfile() {
   html+='<div class="settings-item" onclick="navigate(\'privacy-page\')"><span class="settings-label">🔒 '+t('privacy')+'</span><span class="settings-arrow">&rsaquo;</span></div></div>';
   html+='<div style="text-align:center;margin-top:20px;font-size:12px;color:var(--text-muted)">'+t('version')+'</div>';
   var robotImg='data:image/webp;base64,UklGRlwCAABXRUJQVlA4IFACAADQCwCdASogACAAPl0kjkWjoiEb9AA4BcS2AE6ZQjqD123DtNhmNtFzxWmMbx7/nrQEaCZzPecfB8r8fT6Gedx6X/Xf4Bv5F/ZCT7a4tq3p9p9J4QcDNRBUM2KQkLG/oIa/RuHS56GAAP793TbexX2qcBI5eFizvO4fwVzM1rrY1S1CZUs1CY3uuX2bgADArzLBD4mgS1DbSBQhaOlvz2lW9yy/4qFDUxrL1jahw3x9x4lq3xxagdW8if7ezRGD6H/CWAYL74muK/y2ZBRQpldvFew0lNYaGD3i2+utu+apUazWXYNX7qiVEgNcnPgOY7Y/tS/sPyVDeJNzbzqggdzazyBQ8eaT37Hs1uoublvAzjOH4Pq3HDFo1bRlX6O2XbX9HfcH1rkUEFdbjrneU5O2SKUZKCHwAiAFSZW4NSAzhLYvKaE2ZT/sM99mReqO15cO/a5CiRZnuJ8TTbev/llKAJ61otAyKExbmHeOngejy533s8XeNpZ1/Uz4PPzrunPmPl5c9zvGlBh6tDGWy5V1wRVv4jGgJhP347L5rTM/XEQszIGOXuLTh/zX+LX7MR5XcW9+b4P2XnFacy+zCObJemnNRpLeYqpifDW/Qzirqu5fX3Un+Vk0QdVcdlJHwu+YJvz9fmPUG4vXmQT0NzfDtCfELzgfXGN1NWRe+m9IoIMSW+sZjtF0Jo5u2BBkM3zsVizQ24pzqdXnmFz3cnC6/UpXi7NgPGcyUV+mPFRmVi2GlSOegIM3vt57AuwDXFPbth+l+0rHxKLhXTgylAAA';
-  html+='<footer class="app-footer">Powered by <img src="'+robotImg+'" alt="LIOR-AI" loading="lazy"> <a href="https://lior-ai.com" target="_blank" rel="noopener">lior-ai.com</a><br>נתונים: משרד התחבורה (<a href="https://data.gov.il" target="_blank" rel="noopener">data.gov.il</a>) | רישיון CC-BY</footer>';
+  html+='<footer class="app-footer">Powered by <img src="'+robotImg+'" alt="LIOR-AI" loading="lazy"> <a href="https://lior-ai.com" target="_blank" rel="noopener">lior-ai.com</a> · <a href="https://lior-ai.com/accessibility-statement/">הצהרת נגישות</a><br>נתונים: משרד התחבורה (<a href="https://data.gov.il" target="_blank" rel="noopener">data.gov.il</a>) | רישיון CC-BY</footer>';
   content.innerHTML=html;
 }
 
